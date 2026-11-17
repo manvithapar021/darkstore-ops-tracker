@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - DarkStore Ops Tracker{% endblock %}
+{% block content %}
+<h2>Daily operations summary</h2>
+<div class="cards">
+  <div class="card"><div class="num">{{ summary.total_orders }}</div><div class="lbl">Orders today</div></div>
+  <div class="card"><div class="num">{{ summary.delivered_orders }}</div><div class="lbl">Delivered</div></div>
+  <div class="card"><div class="num">{{ summary.open_orders }}</div><div class="lbl">In pipeline</div></div>
+  <div class="card"><div class="num">{{ summary.on_time_pct }}%</div><div class="lbl">On-time delivery</div></div>
+  <div class="card"><div class="num">{{ summary.avg_total_min or '-' }} min</div><div class="lbl">Avg order time</div></div>
+</div>
+<div class="cards">
+  <div class="card"><div class="num">{{ summary.avg_pick_min or '-' }} min</div><div class="lbl">Avg pick</div></div>
+  <div class="card"><div class="num">{{ summary.avg_pack_min or '-' }} min</div><div class="lbl">Avg pack</div></div>
+  <div class="card"><div class="num">{{ summary.avg_dispatch_min or '-' }} min</div><div class="lbl">Avg dispatch</div></div>
+  <div class="card"><div class="num">{{ summary.avg_deliver_min or '-' }} min</div><div class="lbl">Avg delivery</div></div>
+</div>
+<div class="cards">
+  <div class="card {% if summary.overdue_tasks %}warn{% endif %}"><div class="num">{{ summary.open_tasks }} open / {{ summary.overdue_tasks }} overdue</div><div class="lbl">Commitments ({{ summary.task_completion_pct }}% complete)</div></div>
+  <div class="card {% if summary.stockouts %}warn{% endif %}"><div class="num">{{ summary.stockouts }} stock-outs / {{ summary.low_stock }} low</div><div class="lbl">Inventory alerts</div></div>
+  <div class="card"><div class="num">{{ summary.riders_on_delivery }} / {{ summary.riders_total }}</div><div class="lbl">Riders on delivery</div></div>
+</div>
+
+{% if overdue %}
+<section>
+<h3>Overdue commitments &mdash; follow up now</h3>
+<table>
+<tr><th>Task</th><th>Owner</th><th>Due</th><th>Status</th></tr>
+{% for t in overdue %}
+<tr><td>{{ t.title }}</td><td>{{ t.owner }}</td><td>{{ t.due_at.strftime('%d %b %H:%M') }}</td><td><span class="badge bad">Overdue</span></td></tr>
+{% endfor %}
+</table>
+</section>
+{% endif %}
+
+{% if stockouts %}
+<section>
+<h3>Stock-outs</h3>
+<table>
+<tr><th>SKU</th><th>Product</th><th>Category</th></tr>
+{% for i in stockouts %}
+<tr><td>{{ i.sku }}</td><td>{{ i.name }}</td><td>{{ i.category }}</td></tr>
+{% endfor %}
+</table>
+</section>
+{% endif %}
+
+{% if open_bottlenecks %}
+<section>
+<h3>Open bottlenecks</h3>
+<table>
+<tr><th>Issue</th><th>Area</th></tr>
+{% for b in open_bottlenecks %}
+<tr><td>{{ b.title }}</td><td>{{ b.area }}</td></tr>
+{% endfor %}
+</table>
+</section>
+{% endif %}
+
+<p><a class="btn" href="/export">Download daily report (.xlsx)</a></p>
+{% endblock %}

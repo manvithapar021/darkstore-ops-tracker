@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Orders - DarkStore Ops Tracker{% endblock %}
+{% block content %}
+<h2>Order pipeline &mdash; SLA targets: pick 8 min, pack 5 min, dispatch 5 min, deliver 25 min (45-min promise)</h2>
+<table>
+<tr><th>Ref</th><th>Customer</th><th>Status</th><th>Placed</th><th>Items</th><th>Value (Rs)</th><th>On time</th><th>SLA</th><th></th></tr>
+{% for row in rows %}
+<tr>
+<td>{{ row.order.ref }}</td>
+<td>{{ row.order.customer }}</td>
+<td><span class="badge info">{{ row.order.status }}</span></td>
+<td>{{ row.order.placed_at.strftime('%H:%M') }}</td>
+<td>{{ row.order.items_count }}</td>
+<td>{{ row.order.total_value | int }}</td>
+<td>{% if row.order.delivered_at %}{% if row.on_time %}<span class="badge ok">Yes</span>{% else %}<span class="badge bad">No</span>{% endif %}{% else %}<span class="muted">-</span>{% endif %}</td>
+<td>
+{% for b in row.breaches %}<span class="badge bad">{{ b.stage }} {{ b.minutes }}m &gt; {{ b.target }}m ({{ b.kind }})</span> {% endfor %}
+{% if not row.breaches %}<span class="badge ok">Within SLA</span>{% endif %}
+</td>
+<td>
+{% if row.order.status not in ('delivered', 'cancelled') %}
+<form method="post" action="/orders/{{ row.order.id }}/advance" style="margin:0"><button type="submit">Advance</button></form>
+{% endif %}
+</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

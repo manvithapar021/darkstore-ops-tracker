@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{% block title %}DarkStore Ops Tracker{% endblock %}</title>
+<style>
+body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; margin: 0; background: #f4f6f8; color: #1c2733; }
+header { background: #0f4c6e; color: #fff; padding: 14px 28px; }
+header h1 { margin: 0; font-size: 20px; }
+header p { margin: 2px 0 0; font-size: 13px; opacity: .85; }
+nav { background: #fff; border-bottom: 1px solid #dbe2e8; padding: 0 28px; }
+nav a { display: inline-block; padding: 10px 14px; color: #0f4c6e; text-decoration: none; font-weight: 600; font-size: 14px; }
+nav a:hover { background: #eef4f8; }
+main { padding: 20px 28px 40px; max-width: 1100px; }
+h2 { font-size: 18px; margin: 4px 0 14px; }
+.cards { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+.card { background: #fff; border: 1px solid #dbe2e8; border-radius: 8px; padding: 14px 18px; min-width: 150px; flex: 1; }
+.card .num { font-size: 28px; font-weight: 700; color: #0f4c6e; }
+.card .lbl { font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: #5a6b7a; }
+.card.warn .num { color: #b3261e; }
+table { width: 100%; border-collapse: collapse; background: #fff; font-size: 14px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e3e8ec; }
+th { background: #eef4f8; color: #0f4c6e; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+.badge.ok { background: #e2f3e5; color: #1e6b2e; }
+.badge.bad { background: #fdecea; color: #b3261e; }
+.badge.warn { background: #fff4d6; color: #7a5b00; }
+.badge.info { background: #e3eef7; color: #0f4c6e; }
+section { background: #fff; border: 1px solid #dbe2e8; border-radius: 8px; padding: 16px 18px; margin-bottom: 18px; }
+section h3 { margin: 0 0 10px; font-size: 15px; color: #0f4c6e; }
+button { background: #0f4c6e; color: #fff; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 13px; }
+button:hover { background: #0a3a55; }
+.btn { display: inline-block; background: #0f4c6e; color: #fff; border-radius: 5px; padding: 8px 14px; text-decoration: none; font-size: 14px; font-weight: 600; }
+.demo-note { background: #fff4d6; border: 1px solid #e8d48a; border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 18px; }
+.muted { color: #5a6b7a; font-size: 13px; }
+</style>
+</head>
+<body>
+<header>
+<h1>DarkStore Ops Tracker</h1>
+<p>Quick-commerce dark store operations &middot; demo data &middot; {{ now.strftime('%d %b %Y, %H:%M') if now else '' }}</p>
+</header>
+<nav>
+<a href="/">Dashboard</a>
+<a href="/orders">Orders</a>
+<a href="/inventory">Inventory</a>
+<a href="/riders">Riders</a>
+<a href="/tasks">Tasks</a>
+<a href="/bottlenecks">Bottlenecks</a>
+<a href="/export">Export daily report (.xlsx)</a>
+</nav>
+<main>
+<div class="demo-note"><strong>Demo data:</strong> all orders, riders, stock and tasks on this dashboard are invented sample data for a fictional dark store, created to demonstrate the tracker. No real store, customer or order is represented.</div>
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>

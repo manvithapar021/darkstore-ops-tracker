@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Riders - DarkStore Ops Tracker{% endblock %}
+{% block content %}
+<h2>Rider dispatch board</h2>
+<table>
+<tr><th>Rider</th><th>Phone</th><th>Status</th><th>Delivered today</th></tr>
+{% for entry in board %}
+<tr>
+<td>{{ entry.rider.name }}</td>
+<td>{{ entry.rider.phone }}</td>
+<td>{% if entry.rider.status == 'on-delivery' %}<span class="badge warn">On delivery</span>{% elif entry.rider.status == 'available' %}<span class="badge ok">Available</span>{% else %}<span class="badge info">{{ entry.rider.status }}</span>{% endif %}</td>
+<td>{{ entry.delivered }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

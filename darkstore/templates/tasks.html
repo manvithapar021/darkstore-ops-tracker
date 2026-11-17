@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Tasks - DarkStore Ops Tracker{% endblock %}
+{% block content %}
+<h2>Team tasks &amp; commitments &mdash; tracked to 100% completion</h2>
+<p class="muted">{{ overdue | length }} overdue &middot; mark a task done when the owner confirms it is finished.</p>
+<table>
+<tr><th>Task</th><th>Owner</th><th>Team</th><th>Due</th><th>Status</th><th></th></tr>
+{% for t in tasks %}
+<tr>
+<td>{{ t.title }}</td>
+<td>{{ t.owner }}</td>
+<td>{{ t.team }}</td>
+<td>{{ t.due_at.strftime('%d %b %H:%M') }}</td>
+<td>
+{% if t.status == 'done' %}<span class="badge ok">Done</span>
+{% elif t.is_overdue(now) %}<span class="badge bad">Overdue</span>
+{% elif t.status == 'in-progress' %}<span class="badge warn">In progress</span>
+{% else %}<span class="badge info">Open</span>{% endif %}
+</td>
+<td>
+{% if t.status != 'done' %}
+<form method="post" action="/tasks/{{ t.id }}/done" style="margin:0"><button type="submit">Mark done</button></form>
+{% endif %}
+</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

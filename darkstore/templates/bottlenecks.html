@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Bottlenecks - DarkStore Ops Tracker{% endblock %}
+{% block content %}
+<h2>Bottleneck log &mdash; inefficiency, action, measured result</h2>
+{% for b in entries %}
+<section>
+<h3>{{ b.title }} <span class="badge {% if b.status == 'resolved' %}ok{% else %}warn{% endif %}">{{ b.status }}</span></h3>
+<p><strong>Area:</strong> {{ b.area }} &middot; <strong>Logged:</strong> {{ b.created_at.strftime('%d %b %Y %H:%M') }}</p>
+<p>{{ b.description }}</p>
+{% if b.action_taken %}<p><strong>Action taken:</strong> {{ b.action_taken }}</p>{% endif %}
+{% if b.before_metric %}<p><strong>Before:</strong> {{ b.before_metric }}</p>{% endif %}
+{% if b.after_metric %}<p><strong>After:</strong> {{ b.after_metric }}</p>{% endif %}
+</section>
+{% endfor %}
+{% endblock %}
